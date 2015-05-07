@@ -60,12 +60,12 @@ WORKDIR /opt/openresty
 
 
 ADD https://gist.githubusercontent.com/pahud/336d63b4e14ed2a9f288/raw/2398011714298fc83228b67362f649e44b0d16fa/nginx.conf%20for%20supervisor /etc/supervisor/conf.d/nginx.conf
-ADD https://gist.githubusercontent.com/pahud/729a97ea463f263642af/raw/0a16871c83e92a009447ca4fb50bc0075b90363a/nginx /etc/init.d/nginx
-RUN chmod +x /etc/init.d/nginx
+#ADD https://gist.githubusercontent.com/pahud/729a97ea463f263642af/raw/0a16871c83e92a009447ca4fb50bc0075b90363a/nginx /etc/init.d/nginx
+#RUN chmod +x /etc/init.d/nginx
 RUN sed -ie 's/worker_processes.*/worker_processes 4;/g'  /opt/nginx/conf/nginx.conf
 
 
 # expose HTTP
 EXPOSE 80 443
 
-#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf",  "--nodaemon"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf",  "--nodaemon"]
