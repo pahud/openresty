@@ -12,7 +12,7 @@ ENV \
   TERM=xterm-color
 
 # Install packages.
-RUN apt-get update && apt-get -y install \
+RUN apt-get update && apt-get -y install --no-install-recommends \
   build-essential \
   vim-tiny \
   curl \
