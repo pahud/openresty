@@ -3,6 +3,6 @@
 pwd=`pwd`
 basename=${pwd##*/}
 imagename=${basename#*-}
-docker build -t ${imagename} .
+docker build -t pahud/${imagename}:latest .
 
 exit 0

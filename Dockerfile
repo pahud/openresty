@@ -1,18 +1,17 @@
-# OpenResty docker image on x86
-
 FROM debian:jessie
 
 MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
 
-
-# Set environment.
 ENV \
   DEBCONF_FRONTEND=noninteractive \
   DEBIAN_FRONTEND=noninteractive \
   TERM=xterm-color
 
-# Install packages.
+ADD sources.list.tw /etc/apt/sources.list
+
 RUN apt-get update && apt-get -y install --no-install-recommends \
+  unzip \
+  ca-certificates \
   build-essential \
   vim-tiny \
   curl \
@@ -30,7 +29,7 @@ RUN apt-get update && apt-get -y install --no-install-recommends \
 
 # Compile openresty from source.
 RUN \
-  wget http://openresty.org/download/ngx_openresty-1.7.10.1.tar.gz && \
+  wget http://openresty.org/download/ngx_openresty-1.9.3.1.tar.gz && \
   tar -xzvf ngx_openresty-*.tar.gz && \
   rm -f ngx_openresty-*.tar.gz && \
   cd ngx_openresty-* && \
@@ -39,6 +38,7 @@ RUN \
   --prefix=/opt/openresty \
   --with-pcre-jit \
   --with-http_stub_status_module \
+  --with-http_geoip_module \
   --with-luajit  \
   -j2  && \
   make && \
@@ -50,22 +50,23 @@ RUN \
   ln -sf /opt/openresty/nginx /opt/nginx && \
   ldconfig
 
+RUN wget https://github.com/pintsized/lua-resty-http/archive/master.zip && \
+unzip master.zip && \
+cp lua-resty-http-master/lib/resty/*.lua /opt/openresty/lualib/resty/ && \
+rm -rf master.zip lua-resty-http-master
 
-# Set the working directory.
+
 WORKDIR /opt/openresty
-#WORKDIR /usr/local/openresty
 
-# Add files to the container.
 #ADD nginx-conf /opt/nginx/conf
 
-
 ADD https://gist.githubusercontent.com/pahud/336d63b4e14ed2a9f288/raw/2398011714298fc83228b67362f649e44b0d16fa/nginx.conf%20for%20supervisor /etc/supervisor/conf.d/nginx.conf
-#ADD https://gist.githubusercontent.com/pahud/729a97ea463f263642af/raw/0a16871c83e92a009447ca4fb50bc0075b90363a/nginx /etc/init.d/nginx
-#RUN chmod +x /etc/init.d/nginx
+
+ADD nginx.conf.d/nginx.conf /opt/openresty/nginx/conf/nginx.conf
+ADD nginx.conf.d/default.conf /opt/openresty/nginx/conf/sites-enabled.d/default.conf
+
 RUN sed -ie 's/worker_processes.*/worker_processes 4;/g'  /opt/nginx/conf/nginx.conf
 
-
-# expose HTTP
 EXPOSE 80 443
 
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf",  "--nodaemon"]
