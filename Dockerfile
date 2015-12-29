@@ -29,11 +29,11 @@ RUN apt-get update && apt-get -y install --no-install-recommends \
 
 # Compile openresty from source.
 RUN \
-  wget http://openresty.org/download/ngx_openresty-1.9.3.1.tar.gz && \
+  wget http://openresty.org/download/ngx_openresty-1.9.7.1.tar.gz && \
   tar -xzvf ngx_openresty-*.tar.gz && \
   rm -f ngx_openresty-*.tar.gz && \
   cd ngx_openresty-* && \
-  sed -ie 's/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 1/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 0/g' bundle/lua-cjson-2.1.0.2/lua_cjson.c && \
+  sed -ie 's/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 1/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 0/g' bundle/lua-cjson-2.1.0.3/lua_cjson.c && \
   ./configure \
   --prefix=/opt/openresty \
   --with-pcre-jit \
