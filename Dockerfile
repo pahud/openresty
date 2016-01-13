@@ -3,7 +3,6 @@ FROM debian:jessie
 MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
 
 ENV \
-  DEBCONF_FRONTEND=noninteractive \
   DEBIAN_FRONTEND=noninteractive \
   TERM=xterm-color
 
