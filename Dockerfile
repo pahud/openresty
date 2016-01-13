@@ -65,7 +65,7 @@ ADD https://gist.githubusercontent.com/pahud/336d63b4e14ed2a9f288/raw/2398011714
 ADD nginx.conf.d/nginx.conf /opt/openresty/nginx/conf/nginx.conf
 ADD nginx.conf.d/default.conf /opt/openresty/nginx/conf/sites-enabled.d/default.conf
 
-RUN sed -ie 's/worker_processes.*/worker_processes 4;/g'  /opt/nginx/conf/nginx.conf
+#RUN sed -ie 's/worker_processes.*/worker_processes 4;/g'  /opt/nginx/conf/nginx.conf
 
 EXPOSE 80 443
 
