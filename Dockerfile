@@ -52,7 +52,8 @@ RUN \
 RUN wget https://github.com/pintsized/lua-resty-http/archive/master.zip && \
 unzip master.zip && \
 cp lua-resty-http-master/lib/resty/*.lua /opt/openresty/lualib/resty/ && \
-rm -rf master.zip lua-resty-http-master
+rm -rf master.zip lua-resty-http-master && \
+mkdir /opt/openresty/nginx/conf/extra-locations.d
 
 
 WORKDIR /opt/openresty
@@ -63,9 +64,14 @@ ADD https://gist.githubusercontent.com/pahud/336d63b4e14ed2a9f288/raw/2398011714
 
 ADD nginx.conf.d/nginx.conf /opt/openresty/nginx/conf/nginx.conf
 ADD nginx.conf.d/default.conf /opt/openresty/nginx/conf/sites-enabled.d/default.conf
+ADD startup.sh /startup.sh
 
-#RUN sed -ie 's/worker_processes.*/worker_processes 4;/g'  /opt/nginx/conf/nginx.conf
+
+RUN sed -ie 's/worker_processes.*/worker_processes auto;/g'  /opt/nginx/conf/nginx.conf && \
+chmod +x /startup.sh
+
 
 EXPOSE 80 443
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf",  "--nodaemon"]
+CMD ["/startup.sh"]
+#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf",  "--nodaemon"]
