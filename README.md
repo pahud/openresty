@@ -1,16 +1,16 @@
 # openresty with docker
 
-``sh
+```sh
 docker run --name openresty -p 80:80 -d pahud/openresty
-``
+```
 
 include extra locations into nginx.conf
 --
 Syntax:
 
-``
+```
 docker run -d --name openresty  -e EXTRA_NGINX_CONF_URL="<EXTRA_NGINX_CONF_URL>" -p 80:80 -d pahud/openresty
-``
+```
 
 Example:
 
