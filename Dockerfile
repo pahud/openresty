@@ -28,7 +28,7 @@ RUN apt-get update && apt-get -y install --no-install-recommends \
 
 # Compile openresty from source.
 RUN \
-  wget http://openresty.org/download/ngx_openresty-1.9.7.1.tar.gz && \
+  wget http://openresty.org/download/ngx_openresty-1.9.7.2.tar.gz && \
   tar -xzvf ngx_openresty-*.tar.gz && \
   rm -f ngx_openresty-*.tar.gz && \
   cd ngx_openresty-* && \
