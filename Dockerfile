@@ -1,4 +1,5 @@
-FROM debian:jessie
+#FROM debian:jessie
+FROM ubuntu:trusty
 
 MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
 
@@ -6,9 +7,9 @@ ENV \
   DEBIAN_FRONTEND=noninteractive \
   TERM=xterm-color
 
-ADD sources.list.tw /etc/apt/sources.list
+#ADD sources.list.tw /etc/apt/sources.list
 
-RUN apt-get update && apt-get -y install --no-install-recommends \
+RUN apt-get update && apt-get -y upgrade && apt-get -y install --no-install-recommends \
   unzip \
   ca-certificates \
   build-essential \
@@ -29,9 +30,9 @@ RUN apt-get update && apt-get -y install --no-install-recommends \
 # Compile openresty from source.
 RUN \
   wget https://openresty.org/download/openresty-1.9.7.3.tar.gz && \
-  tar -xzvf ngx_openresty-*.tar.gz && \
-  rm -f ngx_openresty-*.tar.gz && \
-  cd ngx_openresty-* && \
+  tar -xzvf openresty-*.tar.gz && \
+  rm -f openresty-*.tar.gz && \
+  cd openresty-* && \
   sed -ie 's/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 1/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 0/g' bundle/lua-cjson-2.1.0.3/lua_cjson.c && \
   ./configure \
   --prefix=/opt/openresty \
