@@ -1,5 +1,5 @@
-#FROM debian:jessie
-FROM ubuntu:trusty
+FROM debian:8
+#FROM ubuntu:trusty
 
 MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
 
@@ -29,7 +29,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y install --no-install-reco
 
 # Compile openresty from source.
 RUN \
-  wget https://openresty.org/download/openresty-1.9.7.3.tar.gz && \
+  wget https://openresty.org/download/openresty-1.9.7.4.tar.gz && \
   tar -xzvf openresty-*.tar.gz && \
   rm -f openresty-*.tar.gz && \
   cd openresty-* && \
