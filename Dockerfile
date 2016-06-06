@@ -1,4 +1,4 @@
-FROM debian:8
+FROM debian:jessie
 #FROM ubuntu:trusty
 
 MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
@@ -29,11 +29,11 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y install --no-install-reco
 
 # Compile openresty from source.
 RUN \
-  wget https://openresty.org/download/openresty-1.9.7.4.tar.gz && \
+  wget https://openresty.org/download/openresty-1.9.15.1.tar.gz && \
   tar -xzvf openresty-*.tar.gz && \
   rm -f openresty-*.tar.gz && \
   cd openresty-* && \
-  sed -ie 's/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 1/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 0/g' bundle/lua-cjson-2.1.0.3/lua_cjson.c && \
+  sed -ie 's/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 1/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 0/g' bundle/lua-cjson-*/lua_cjson.c && \
   ./configure \
   --prefix=/opt/openresty \
   --with-pcre-jit \
