@@ -2,6 +2,8 @@ FROM centos:7
 
 MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
 
+# repo info:  https://copr.fedorainfracloud.org/coprs/openresty/openresty/
+
 RUN yum-config-manager --add-repo https://copr.fedorainfracloud.org/coprs/openresty/openresty/repo/epel-7/openresty-openresty-epel-7.repo && \
 yum install -y openresty
 
