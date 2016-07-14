@@ -1,0 +1,12 @@
+FROM centos:7
+
+MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
+
+RUN yum-config-manager --add-repo https://copr.fedorainfracloud.org/coprs/openresty/openresty/repo/epel-7/openresty-openresty-epel-7.repo && \
+yum install -y openresty
+
+ADD ./start.centos7.sh /root/
+
+EXPOSE 80
+
+CMD ["/root/start.centos7.sh"]
