@@ -7,6 +7,8 @@ ENV \
   DEBIAN_FRONTEND=noninteractive \
   TERM=xterm-color
 
+ENV version 1.11.2.1
+
 #ADD sources.list.tw /etc/apt/sources.list
 
 RUN apt-get update && apt-get -y upgrade && apt-get -y install --no-install-recommends \
@@ -29,7 +31,7 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y install --no-install-reco
 
 # Compile openresty from source.
 RUN \
-  wget https://openresty.org/download/openresty-1.9.15.1.tar.gz && \
+  wget https://openresty.org/download/openresty-${version}.tar.gz && \
   tar -xzvf openresty-*.tar.gz && \
   rm -f openresty-*.tar.gz && \
   cd openresty-* && \
@@ -56,7 +58,6 @@ cp lua-resty-http-master/lib/resty/*.lua /opt/openresty/lualib/resty/ && \
 rm -rf master.zip lua-resty-http-master && \
 mkdir /opt/openresty/nginx/conf/extra-locations.d
 
-
 WORKDIR /opt/openresty
 
 #ADD nginx-conf /opt/nginx/conf
@@ -66,7 +67,6 @@ ADD https://gist.githubusercontent.com/pahud/336d63b4e14ed2a9f288/raw/2398011714
 ADD nginx.conf.d/nginx.conf /opt/openresty/nginx/conf/nginx.conf
 ADD nginx.conf.d/default.conf /opt/openresty/nginx/conf/sites-enabled.d/default.conf
 ADD startup.sh /startup.sh
-
 
 RUN sed -ie 's/worker_processes.*/worker_processes auto;/g'  /opt/nginx/conf/nginx.conf && \
 chmod +x /startup.sh
