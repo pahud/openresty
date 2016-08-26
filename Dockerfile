@@ -22,8 +22,6 @@ RUN apt-get update && apt-get -y upgrade && apt-get -y install --no-install-reco
   libncurses5-dev \
   libpcre3-dev \
   libssl-dev \
-  luarocks \
-  libgeoip-dev \
   nano \
   perl \
   wget \
@@ -40,7 +38,6 @@ RUN \
   --prefix=/opt/openresty \
   --with-pcre-jit \
   --with-http_stub_status_module \
-  --with-http_geoip_module \
   --with-luajit  \
   -j2  && \
   make && \
@@ -52,11 +49,11 @@ RUN \
   ln -sf /opt/openresty/nginx /opt/nginx && \
   ldconfig
 
-RUN wget https://github.com/pintsized/lua-resty-http/archive/master.zip && \
-unzip master.zip && \
-cp lua-resty-http-master/lib/resty/*.lua /opt/openresty/lualib/resty/ && \
-rm -rf master.zip lua-resty-http-master && \
-mkdir /opt/openresty/nginx/conf/extra-locations.d
+#RUN wget https://github.com/pintsized/lua-resty-http/archive/master.zip && \
+#unzip master.zip && \
+#cp lua-resty-http-master/lib/resty/*.lua /opt/openresty/lualib/resty/ && \
+#rm -rf master.zip lua-resty-http-master && \
+RUN mkdir /opt/openresty/nginx/conf/extra-locations.d
 
 WORKDIR /opt/openresty
 
