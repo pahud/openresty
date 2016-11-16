@@ -2,7 +2,7 @@ FROM amazonlinux:latest
 
 MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
 
-RUN yum update -y && yum install -y yum-utils
+RUN yum update -y; yum install -y yum-utils
 
 # repo info:  https://copr.fedorainfracloud.org/coprs/openresty/openresty/
 # official RPM packages:  http://openresty.org/en/rpm-packages.html
