@@ -1,0 +1,8 @@
+FROM amazonlinux:latest
+
+MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
+
+ENV TERM=xterm-color
+
+RUN yum update -y; \
+yum groupinstall "Development Tools" -y;

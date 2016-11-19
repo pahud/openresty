@@ -7,7 +7,7 @@ ENV \
   DEBIAN_FRONTEND=noninteractive \
   TERM=xterm-color
 
-ENV version 1.11.2.1
+ENV version 1.11.2.2
 
 #ADD sources.list.tw /etc/apt/sources.list
 
