@@ -14,7 +14,8 @@ RUN yum install -y \
   nano \
   wget \
   pcre-devel \
-  openssl-devel
+  openssl-devel \
+  python27-setuptools
 
 # Compile openresty from source.
 RUN \
@@ -38,15 +39,9 @@ RUN \
   ln -sf /opt/openresty/nginx /opt/nginx && \
   ldconfig
 
-#RUN wget https://github.com/pintsized/lua-resty-http/archive/master.zip && \
-#unzip master.zip && \
-#cp lua-resty-http-master/lib/resty/*.lua /opt/openresty/lualib/resty/ && \
-#rm -rf master.zip lua-resty-http-master && \
 RUN mkdir /opt/openresty/nginx/conf/extra-locations.d
 
 WORKDIR /opt/openresty
-
-#ADD nginx-conf /opt/nginx/conf
 
 ADD https://gist.githubusercontent.com/pahud/336d63b4e14ed2a9f288/raw/2398011714298fc83228b67362f649e44b0d16fa/nginx.conf%20for%20supervisor /etc/supervisor/conf.d/nginx.conf
 
@@ -55,12 +50,25 @@ ADD nginx.conf.d/default.conf /opt/openresty/nginx/conf/sites-enabled.d/default.
 ADD startup.sh /startup.sh
 
 RUN sed -ie 's/worker_processes.*/worker_processes auto;/g'  /opt/nginx/conf/nginx.conf && \
-chmod +x /startup.sh
+chmod +x /startup.sh; \
 
-RUN yum group remove "Development Tools" -y
+#
+# install supervisord
+#
+easy_install supervisor && \
+echo_supervisord_conf > /etc/supervisor/supervisord.conf.default; \
+ln -sf /usr/local/bin/supervisord /usr/bin/supervisord; \
+mkdir /var/log/supervisor
+ADD supervisord.conf.amazonlinux /etc/supervisor/supervisord.conf
+
+#
+# clean-ups
+#
+RUN yum group remove "Development Tools" -y; \
+yum remove -y unzip telnet nano wget; \
+rm -rf /usr/src/* /openresty-${version} 
 
 
 EXPOSE 80 443
 
 CMD ["/startup.sh"]
-#CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf",  "--nodaemon"]
