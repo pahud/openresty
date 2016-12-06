@@ -8,7 +8,8 @@ phases:
       - which mv
   build:
     commands:
-      - docker build -t $LOCAL_TAG_NAME .
+      - echo Build started on `date`
+      #- docker build -t $LOCAL_TAG_NAME .
   post_build:
     commands:
       - echo Build completed on `date`
