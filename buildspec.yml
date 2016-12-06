@@ -4,15 +4,13 @@ phases:
   install:
     commands:
       - echo $PATH
-      - which mkdir
-      - which mv
   build:
     commands:
-      - echo Build started on `date`
-      #- docker build -t $LOCAL_TAG_NAME .
+      - /bin/mdkir ~/.docker && /bin/mv dot-docker.config.json ~/.docker/config.json
+      - docker build -t $LOCAL_TAG_NAME .
   post_build:
     commands:
       - echo Build completed on `date`
-      #- docker tag $LOCAL_TAG_NAME $TARGET_REPO_NAME
-      #- docker push $TARGET_REPO_NAME
+      - docker tag $LOCAL_TAG_NAME $TARGET_REPO_NAME
+      - docker push $TARGET_REPO_NAME
 
