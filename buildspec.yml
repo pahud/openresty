@@ -12,6 +12,6 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - docker tag $LOCAL_TAG_NAME $TARGET_REPO_NAME
-      - docker push $TARGET_REPO_NAME
+      #- docker tag $LOCAL_TAG_NAME $TARGET_REPO_NAME
+      #- docker push $TARGET_REPO_NAME
 
