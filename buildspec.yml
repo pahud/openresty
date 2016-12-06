@@ -3,7 +3,6 @@ version: 0.1
 phases:
   install:
     commands:
-      - mdkir ~/.docker && mv dot-docker.config.json ~/.docker/config.json
       - echo $PATH
   build:
     commands:
