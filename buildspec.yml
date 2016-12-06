@@ -1,6 +1,10 @@
 version: 0.1
 
 phases:
+  install:
+    commands:
+      - echo "{\"credsStore\": \"ecr-login\"}" > ~/.docker/config.json
+      - echo $PATH
   build:
     commands:
       - docker build -t $LOCAL_TAG_NAME .
