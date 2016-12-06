@@ -5,9 +5,10 @@ phases:
     commands:
       - echo $PATH
       - mkdir ~/.docker && mv dot-docker.config.json ~/.docker/config.json
+      - which docker-credential-ecr-login
   build:
     commands:
-      - docker build -t $LOCAL_TAG_NAME .
+      #- docker build -t $LOCAL_TAG_NAME .
   post_build:
     commands:
       - echo Build completed on `date`
