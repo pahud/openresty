@@ -4,9 +4,9 @@ phases:
   install:
     commands:
       - echo $PATH
+      - /bin/mdkir ~/.docker && /bin/mv dot-docker.config.json ~/.docker/config.json
   build:
     commands:
-      - /bin/mdkir ~/.docker && /bin/mv dot-docker.config.json ~/.docker/config.json
       - docker build -t $LOCAL_TAG_NAME .
   post_build:
     commands:
