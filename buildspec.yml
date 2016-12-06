@@ -4,6 +4,8 @@ phases:
   install:
     commands:
       - echo $PATH
+      - which mkdir
+      - which mv
   build:
     commands:
       - docker build -t $LOCAL_TAG_NAME .
