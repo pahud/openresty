@@ -1,17 +1,19 @@
 version: 0.1
 
 phases:
-  install:
+  pre_build:
     commands:
-      - echo $PATH
-      - mkdir ~/.docker && mv dot-docker.config.json ~/.docker/config.json
-      - which docker-credential-ecr-login
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION)
   build:
     commands:
-      #- docker build -t $LOCAL_TAG_NAME .
+      - echo Build started on `date`
+      - echo Building the Docker image...          
+      - docker build -t $IMAGE_REPO_NAME:$IMAGE_TAG .
+      - docker tag $IMAGE_REPO_NAME:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
   post_build:
     commands:
       - echo Build completed on `date`
-      - docker tag $LOCAL_TAG_NAME $TARGET_REPO_NAME
-      - docker push $TARGET_REPO_NAME
+      - echo Pushing the Docker image...
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO_NAME:$IMAGE_TAG
 
