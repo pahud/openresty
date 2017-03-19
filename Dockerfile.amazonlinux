@@ -1,4 +1,5 @@
-FROM pahud/amazonlinux:devel
+#FROM pahud/amazonlinux:devel
+FROM amazonlinux:latest
 
 MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
 
@@ -6,8 +7,15 @@ ENV TERM=xterm-color
 
 ENV version 1.11.2.2
 
+RUN yum update -y && \
+yum groupinstall -y 'Development Tools' && \
+yum install nginx python-pip -y && \
+easy_install-2.6 supervisor && \
+echo_supervisord_conf > /etc/supervisord.conf && \
+mkdir -p /etc/supervisor/conf.d /var/log/supervisor
 
-RUN yum install -y \
+
+RUN yum update -y && yum install -y \
   unzip \
   ca-certificates \
   telnet \
@@ -50,15 +58,15 @@ ADD nginx.conf.d/default.conf /opt/openresty/nginx/conf/sites-enabled.d/default.
 ADD startup.sh /startup.sh
 
 RUN sed -ie 's/worker_processes.*/worker_processes auto;/g'  /opt/nginx/conf/nginx.conf && \
-chmod +x /startup.sh; \
+chmod +x /startup.sh
 
 #
 # install supervisord
 #
-easy_install supervisor && \
-echo_supervisord_conf > /etc/supervisor/supervisord.conf.default; \
-ln -sf /usr/local/bin/supervisord /usr/bin/supervisord; \
-mkdir /var/log/supervisor
+#easy_install supervisor && \
+#echo_supervisord_conf > /etc/supervisor/supervisord.conf.default; \
+#ln -sf /usr/local/bin/supervisord /usr/bin/supervisord; \
+#mkdir /var/log/supervisor
 ADD supervisord.conf.amazonlinux /etc/supervisor/supervisord.conf
 
 #
