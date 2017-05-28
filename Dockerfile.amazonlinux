@@ -1,80 +1,40 @@
-#FROM pahud/amazonlinux:devel
 FROM amazonlinux:latest
 
 MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
 
 ENV TERM=xterm-color
 
-ENV version 1.11.2.2
+ENV version 1.11.2.3
+ENV orbase /usr/local/openresty
 
 RUN yum update -y && \
-yum groupinstall -y 'Development Tools' && \
-yum install nginx python-pip -y && \
-easy_install-2.6 supervisor && \
-echo_supervisord_conf > /etc/supervisord.conf && \
-mkdir -p /etc/supervisor/conf.d /var/log/supervisor
+yum install yum-utils python-pip -y && \
+yum-config-manager -y --add-repo https://openresty.org/package/amazon/openresty.repo && \
+yum install openresty -y
 
+RUN mkdir -p ${orbase}/nginx/conf/extra-locations.d && \
+ln -sf /usr/local/openresty/nginx /opt/nginx && \
+ln -sf /usr/local/openresty /opt/openresty
 
-RUN yum update -y && yum install -y \
-  unzip \
-  ca-certificates \
-  telnet \
-  nano \
-  wget \
-  pcre-devel \
-  openssl-devel \
-  python27-setuptools
-
-# Compile openresty from source.
-RUN \
-  wget https://openresty.org/download/openresty-${version}.tar.gz && \
-  tar -xzvf openresty-*.tar.gz && \
-  rm -f openresty-*.tar.gz && \
-  cd openresty-* && \
-  sed -ie 's/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 1/DEFAULT_ENCODE_EMPTY_TABLE_AS_OBJECT 0/g' bundle/lua-cjson-*/lua_cjson.c && \
-  ./configure \
-  --prefix=/opt/openresty \
-  --with-pcre-jit \
-  --with-http_stub_status_module \
-  --with-luajit  \
-  -j2  && \
-  make && \
-  make install && \
-  make clean && \
-  cd .. && \
-  rm -rf ngx_openresty-*&& \
-  ln -s /opt/openresty/nginx/sbin/nginx /usr/local/bin/nginx && \
-  ln -sf /opt/openresty/nginx /opt/nginx && \
-  ldconfig
-
-RUN mkdir /opt/openresty/nginx/conf/extra-locations.d
-
-WORKDIR /opt/openresty
+WORKDIR ${orbase}
 
 ADD https://gist.githubusercontent.com/pahud/336d63b4e14ed2a9f288/raw/2398011714298fc83228b67362f649e44b0d16fa/nginx.conf%20for%20supervisor /etc/supervisor/conf.d/nginx.conf
 
-ADD nginx.conf.d/nginx.conf /opt/openresty/nginx/conf/nginx.conf
-ADD nginx.conf.d/default.conf /opt/openresty/nginx/conf/sites-enabled.d/default.conf
+ADD nginx.conf.d/nginx.conf ${orbase}/nginx/conf/nginx.conf
+ADD nginx.conf.d/default.conf ${orbase}/nginx/conf/sites-enabled.d/default.conf
 ADD startup.sh /startup.sh
 
-RUN sed -ie 's/worker_processes.*/worker_processes auto;/g'  /opt/nginx/conf/nginx.conf && \
+RUN sed -ie 's/worker_processes.*/worker_processes auto;/g'  ${orbase}/nginx/conf/nginx.conf && \
 chmod +x /startup.sh
 
 #
 # install supervisord
 #
-#easy_install supervisor && \
-#echo_supervisord_conf > /etc/supervisor/supervisord.conf.default; \
-#ln -sf /usr/local/bin/supervisord /usr/bin/supervisord; \
-#mkdir /var/log/supervisor
+RUN easy_install-2.6 supervisor && \
+echo_supervisord_conf > /etc/supervisor/supervisord.conf.default; \
+ln -sf /usr/local/bin/supervisord /usr/bin/supervisord; \
+mkdir /var/log/supervisor
 ADD supervisord.conf.amazonlinux /etc/supervisor/supervisord.conf
-
-#
-# clean-ups
-#
-RUN yum group remove "Development Tools" -y; \
-yum remove -y unzip telnet nano wget; \
-rm -rf /usr/src/* /openresty-${version} 
 
 
 EXPOSE 80 443
