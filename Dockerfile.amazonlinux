@@ -8,7 +8,7 @@ ENV version 1.11.2.3
 ENV orbase /usr/local/openresty
 
 RUN yum update -y && \
-yum install yum-utils python-pip -y && \
+yum install yum-utils python-pip wget -y && \
 yum-config-manager -y --add-repo https://openresty.org/package/amazon/openresty.repo && \
 yum install openresty -y
 
