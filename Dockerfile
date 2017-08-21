@@ -7,7 +7,9 @@ ENV \
   DEBIAN_FRONTEND=noninteractive \
   TERM=xterm-color
 
-ENV version 1.11.2.3
+# Docker Build Arguments
+ARG version="1.11.2.5"
+ENV orbase /usr/local/openresty
 
 #ADD sources.list.tw /etc/apt/sources.list
 

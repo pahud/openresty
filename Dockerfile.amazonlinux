@@ -4,7 +4,8 @@ MAINTAINER Pahud Hsieh <pahudnet@gmail.com>
 
 ENV TERM=xterm-color
 
-ENV version 1.11.2.3
+# Docker Build Arguments
+ARG version="1.11.2.5"
 ENV orbase /usr/local/openresty
 
 RUN yum update -y && \
