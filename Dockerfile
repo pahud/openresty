@@ -8,7 +8,7 @@ ENV \
   TERM=xterm-color
 
 # Docker Build Arguments
-ARG version="1.11.2.5"
+ARG version="1.13.6.1"
 ENV orbase /usr/local/openresty
 
 #ADD sources.list.tw /etc/apt/sources.list
